@@ -1,15 +1,19 @@
 package com.dc.investmentapplication.controller;
 
 import com.dc.investmentapplication.entity.User;
+import com.dc.investmentapplication.helper.GlobalHelper;
 import com.dc.investmentapplication.service.UserService;
+import com.dc.investmentapplication.utils.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.sql.SQLDataException;
 import java.util.List;
 
 @RestController
@@ -46,8 +50,31 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User createUser(@Valid @RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody User user, HttpServletRequest request) {
+        long start = System.currentTimeMillis();
+        try {
+            String res = userService.createUser(user);
+            //return new ResponseEntity<>(res, HttpStatus.CREATED) ;
+            ApiResponse<String > response = new ApiResponse<>(HttpStatus.OK.value(), "User created successfully", res);
+//            response.setRequestId(request.getHeader("Request-ID"));
+//            response.setPath(request.getRequestURI());
+//            response.setMethod(request.getMethod());
+//            response.setHeaders(GlobalHelper.getHeadersMap(request));
+//            response.setUser(request.getUserPrincipal() != null ? request.getUserPrincipal().getName() : "Anonymous");
+//            response.setServer(request.getLocalName());
+            response.setDuration(System.currentTimeMillis() - start);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ApiResponse<String  > response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "User creation failed", e.getMessage());
+//            response.setRequestId(request.getHeader("Request-ID"));
+//            response.setPath(request.getRequestURI());
+//            response.setMethod(request.getMethod());
+//            response.setHeaders(GlobalHelper.getHeadersMap(request));
+//            response.setUser(request.getUserPrincipal() != null ? request.getUserPrincipal().getName() : "Anonymous");
+//            response.setServer(request.getLocalName());
+            response.setDuration(System.currentTimeMillis() - start);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PutMapping("/{id}")

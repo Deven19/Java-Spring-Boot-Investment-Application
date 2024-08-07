@@ -19,9 +19,9 @@ public class Roles {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @OneToOne(mappedBy = "role")
+ /*       @OneToOne(mappedBy = "role")
         @JsonBackReference
-        private User user;
+        private User user;*/
 
         @NonNull
         private String roleName;
