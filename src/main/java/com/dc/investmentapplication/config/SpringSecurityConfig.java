@@ -36,8 +36,9 @@ public class SpringSecurityConfig {
             .csrf(csrf->csrf.disable())
             .authorizeHttpRequests(authorizeHttpRequests->
                     authorizeHttpRequests
-                            //.requestMatchers("/api/users/register").permitAll()
-                            //.requestMatchers("/api/users/csrf-token").permitAll()
+//                            .requestMatchers("/api/users/register").permitAll()
+//                            .requestMatchers("/api/users/csrf-token").permitAll()
+//                            .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                             .anyRequest().permitAll())
 
             .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").passwordParameter("username").passwordParameter("password").successForwardUrl("/").permitAll());
