@@ -13,7 +13,9 @@ import java.util.Map;
 public class GlobalHelper {
 
     public static final ThreadLocal<SimpleDateFormat> threadSafeDatetimeFormat =
-            ThreadLocal.withInitial(() -> new SimpleDateFormat("MM-dd-YYYY HH:mm:ss.SSSZ"));
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("MM-dd-YYYY HH:mm:ss"));
+    public static final ThreadLocal<SimpleDateFormat> threadSafeDatetimeFormatSQL =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("YYY-MM-dd HH:mm:ss"));
     public static final Logger logger = LoggerFactory.getLogger(GlobalHelper.class);
 
     public static Map<String, String> getHeadersMap(HttpServletRequest request) {

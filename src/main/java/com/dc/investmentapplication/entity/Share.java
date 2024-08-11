@@ -43,7 +43,7 @@ public class Share {
     private BigDecimal peRatio;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 }
