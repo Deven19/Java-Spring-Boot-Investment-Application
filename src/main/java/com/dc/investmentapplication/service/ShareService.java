@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ShareService {
@@ -75,5 +77,24 @@ public class ShareService {
             throw new Exception("Error caught in file upload");
         }
 
+    }
+
+    public List<Share> getAllShare() throws Exception {
+        try {
+            List<Share> shares =  shareRepository.findAll();
+            Map<String, Share> uniqueShare = shares.stream()
+                    .filter(e-> {
+                        if(e.getCompanyName() == null || e.getCompanyName().trim().isEmpty()  || e.getCompanyName().trim().isBlank()) {
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    })
+                    .collect(Collectors.toMap(Share::getCompanyName, sh->sh,(p1, p2)->p1));
+            return uniqueShare.values().stream().toList();
+        }catch (Exception e){
+            GlobalHelper.logger.error("Unexpected error occurred", e);
+            throw new Exception("Error caught while fetching data :: getAllShare");
+        }
     }
 }
